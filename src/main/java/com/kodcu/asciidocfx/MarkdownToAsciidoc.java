@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -75,7 +76,11 @@ public class MarkdownToAsciidoc {
     }
 
     public static void convert(Path markdownPath, Consumer<String> resultCallback) {
-        resultCallback.accept(convert(markdownPath));
+
+        CompletableFuture.runAsync(() -> {
+            resultCallback.accept(convert(markdownPath));
+        });
+
     }
 
     public static String convert(File markdownFile) {
@@ -83,11 +88,15 @@ public class MarkdownToAsciidoc {
     }
 
     public static void convert(File markdownFile, Consumer<String> resultCallback) {
-        resultCallback.accept(convert(markdownFile));
+        CompletableFuture.runAsync(() -> {
+            resultCallback.accept(convert(markdownFile));
+        });
     }
 
     public static void convert(String markdown, Consumer<String> resultCallback) {
-        resultCallback.accept(convert(markdown));
+        CompletableFuture.runAsync(() -> {
+            resultCallback.accept(convert(markdown));
+        });
     }
 
     public static void convert(String markdown, Path asciidocPath, StandardOpenOption... openOption) {
